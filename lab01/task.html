@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>Example 01 - triangle and square</title>
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
+    <style type="text/css">
+        body {
+            background-color: #000000;
+
+            overflow: hidden;
+        }
+    </style>
+
+    <script src="three.js"></script>
+</head>
+
+<body>
+    <div id="WebGLCanvas"> </div>
+
+    <script>
+        var scene;
+
+        var camera;
+
+        initializeScene();
+
+        renderScene();
+
+        function initializeScene() {
+
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+
+            renderer.setClearColor(0x000000, 1);
+
+            canvasWidth = window.innerWidth;
+            canvasHeight = window.innerHeight;
+
+            renderer.setSize(canvasWidth, canvasHeight);
+
+            document.getElementById("WebGLCanvas").appendChild(renderer.domElement);
+
+            scene = new THREE.Scene();
+
+            camera = new THREE.PerspectiveCamera(45, canvasWidth / canvasHeight, 1, 100);
+            camera.position.set(0, 0, 10);
+            camera.lookAt(scene.position);
+            scene.add(camera);
+
+            createTree(-1.5)
+            createTree(-3.5)
+            createTree(-5.5)
+
+            var squareGeometry = new THREE.Geometry();
+            squareGeometry.vertices.push(new THREE.Vector3(-1.0, 1.0, 0.0));
+            squareGeometry.vertices.push(new THREE.Vector3(1.0, 1.0, 0.0));
+            squareGeometry.vertices.push(new THREE.Vector3(1.0, -1.0, 0.0));
+            squareGeometry.vertices.push(new THREE.Vector3(-1.0, -1.0, 0.0));
+
+            squareGeometry.faces.push(new THREE.Face3(0, 1, 2));
+            squareGeometry.faces.push(new THREE.Face3(0, 2, 3));
+
+            var squareMaterial = new THREE.MeshBasicMaterial({
+                color: 0xe622bb,
+                side: THREE.DoubleSide
+            });
+
+            var squareMesh = new THREE.Mesh(squareGeometry, squareMaterial);
+            squareMesh.position.set(2.5, -1.0, 4.0);
+            scene.add(squareMesh);
+
+            createTriangle(1,2.5, 1.0, 4.0);
+        }
+
+        function renderScene() {
+            renderer.render(scene, camera);
+        }
+
+        function createTriangle(length, x, y, z) {
+            var triangleGeometry = new THREE.Geometry();
+            triangleGeometry.vertices.push(new THREE.Vector3(0.0, length, 0.0));
+            triangleGeometry.vertices.push(new THREE.Vector3(-length, -length, 0.0));
+            triangleGeometry.vertices.push(new THREE.Vector3(length, -length, 0.0));
+            triangleGeometry.faces.push(new THREE.Face3(0, 1, 2));
+
+            var triangleMaterial = new THREE.MeshBasicMaterial({
+                color: 0x29FC1F,
+                side: THREE.DoubleSide
+            });
+
+            var triangleMesh = new THREE.Mesh(triangleGeometry, triangleMaterial);
+            triangleMesh.position.set(x, y, z);
+            scene.add(triangleMesh);
+        }
+
+        function createTree(xPosition){
+            triangle1 = createTriangle(1, xPosition, 0, 1)
+            triangle2 = createTriangle(0.7, xPosition, 1, 1)
+            triangle3 = createTriangle(0.5, xPosition, 1.7, 1)
+        }
+
+    </script>
+</body>
+
+</html>
